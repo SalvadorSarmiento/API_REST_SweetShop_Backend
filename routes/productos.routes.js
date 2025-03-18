@@ -7,10 +7,15 @@ const Producto = require('../models/productos');
 // Ruta para obtener productos
 router.get('/productos', async (req, res) => {
     try {
-        const productos = await Producto.findAll();
+        const productos = await Producto.findAll({ raw: true });
+        console.log("📌 Productos obtenidos de la BD:", productos); // 👀 LOG para verificar
+
+        if (!productos.length) {
+            return res.status(404).json({ message: "No hay productos disponibles" });
+        }
 
         const productosConImagen = productos.map(prod => ({
-            ...prod.toJSON(),
+            ...prod,
             imagen: `http://localhost:${process.env.PORT || 3001}/uploads/${prod.imagen}`
         }));
 
@@ -20,6 +25,7 @@ router.get('/productos', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener productos' });
     }
 });
+
 
 
 // Ruta para subir imagen de producto

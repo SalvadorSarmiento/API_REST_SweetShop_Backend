@@ -36,4 +36,16 @@ const Producto = sequelize.define("Productos", {
     timestamps: false 
 });
 
+const testQuery = async () => {
+    try {
+        const productos = await Producto.findAll();
+        console.log("📦 Productos obtenidos:", productos);
+    } catch (error) {
+        console.error("❌ Error al obtener productos:", error);
+    }
+};
+
+testQuery();
+
 module.exports = Producto;
+

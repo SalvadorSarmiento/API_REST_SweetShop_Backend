@@ -33,17 +33,6 @@ app.get('/', (req, res) => {
     res.send('Servidor corriendo 🚀');
 });
 
-// Ruta para obtener productos
-app.get('/productos', async (req, res) => {
-    try {
-        const productos = await Producto.findAll();
-        res.json(productos);
-    } catch (error) {
-        console.error('❌ Error al obtener productos:', error);
-        res.status(500).json({ error: 'Error al obtener productos' });
-    }
-});
-
 // Middleware de manejo de errores global
 app.use((err, req, res, next) => {
     console.error('❌ Error en el servidor:', err);
@@ -52,9 +41,11 @@ app.use((err, req, res, next) => {
 
 // Conectar a la base de datos y luego iniciar el servidor
 sequelize.authenticate()
-    .then(() => {
+    .then(async() => {
         console.log('✅ Conectado a SQL Server correctamente.');
-        return sequelize.sync({ alter: true }); // Evita borrar datos innecesariamente
+        const productos = await Producto.findAll({ raw: true });
+        console.log('📌 Productos en la BD:', productos); // <-- Verifica si hay productos
+        return sequelize.sync({ alter: true });
     })
     .then(() => {
         app.listen(PORT, () => {
