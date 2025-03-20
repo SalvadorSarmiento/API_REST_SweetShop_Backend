@@ -11,10 +11,6 @@ const Producto = sequelize.define("Productos", {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    categoria: {
-        type: DataTypes.STRING(50),
-        allowNull: false
-    },
     precio: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
@@ -30,6 +26,10 @@ const Producto = sequelize.define("Productos", {
     imagen: {  // 📌 Agregamos el campo imagen
         type: DataTypes.STRING(255),  
         allowNull: false  // Puede ser null si aún no hay imagen
+    },
+    categoria_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     }
 }, {
     tableName: "Productos", 
